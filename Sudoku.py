@@ -20,29 +20,39 @@ def _len(_list):
         num += 1
     return num
 
+
+
 def _valid(sudoku):
+    """
+    Returns True if sudoku accomplice all rules of a sudoku, false if else.
+    
+    Args:
+        sudoku (array): a array filed with zeros mostly and integers between 1 to 9.
+    
+    Returns:
+        boolean: True or False.
+    """
     
     if _valid_Grid(sudoku):
         if _valid_Row(sudoku):
             if _valid_Column(sudoku):
-                return True#_valid_Column(sudoku)
+                return True
             
     return False
-"""            
-            else:
-                return False 
-                #print(f"Columna: {_valid_Column(sudoku)}")
-        else:
-            return False 
-            #print(f"Fila: {_valid_Row(sudoku)}")
-    else:
-        return False 
-        #print(f"Cuadricula: {_valid_Grid(sudoku)}")
-"""
-     
+
+
+   
 def _valid_Grid(sudoku):
-    #x = 3
-    #y = 0
+    """
+    Returns True if sudoku accomplice all rules of a sudoku in the inset, false if else.
+    
+    Args:
+        sudoku (array): a array filed with zeros mostly and integers between 1 to 9.
+    
+    Returns:
+        boolean: True or False.
+    """
+
     for block in range(9):
         row = (block//3) * 3
         col = (block%3) * 3
@@ -50,23 +60,27 @@ def _valid_Grid(sudoku):
             coin = 0
             for r in range(row,row+3):
                 
-                #comp = 0
-                
                 for c in range(col,col+3):
                     bloque = sudoku[r][c]
-                    #print(f"En la fila {r} y Columna {c}, esta el bloque {bloque}, se esta comparando el numero {num}")
                     if bloque == num:
                         coin += 1
+                        
                 if coin > 1:
-                    
                     return False
-                    
-                #y = x
-                #x += 3
-
+                             
     return True 
 
+
 def _valid_Row(sudoku):
+    """
+    Returns True if sudoku accomplice all rules of a sudoku in a row, false if else.
+    
+    Args:
+        sudoku (array): a array filed with zeros mostly and integers between 1 to 9.
+    
+    Returns:
+        boolean: True or False.
+    """
     for row in sudoku:
         for num in range(1,10):
             coin = 0
@@ -77,7 +91,17 @@ def _valid_Row(sudoku):
                 return False
     return True
 
+
 def _valid_Column(sudoku):
+    """
+    Returns True if sudoku accomplice all rules of a sudoku in a column, false if else.
+    
+    Args:
+        sudoku (array): a array filed with zeros mostly and integers between 1 to 9.
+    
+    Returns:
+        boolean: True or False.
+    """
     for r in range(9):
         for num in range(1,10):
             coin = 0
@@ -91,7 +115,15 @@ def _valid_Column(sudoku):
         
 
 def _Asudoku():
+    """
+    Returns a matrix filled with integers between 0 to 9, given a matrix filled with zeros.
     
+    Args:
+        None.
+    
+    Returns:
+        boolean: True or False.
+    """
     for row in range(0,9):
             
         for col in range(0,9):
@@ -105,6 +137,17 @@ def _Asudoku():
 
 
 def _Solution_With_Backtracking(sudoku):
+    """
+    Checks where all the zeros in the matrix are located, passes a list with the locations to the Bakctracking funtion,
+    if the backtracking returns True the funtion will return the solved sudoku, else print a error message.
+    
+    Args:
+        sudoku (array): a array filed with zeros mostly and integers between 1 to 9.
+    
+    Returns:
+        sudoku(array): a solved array of sudoku
+        string: "No se pudo encontar una solucion".
+    """
     locations = []
     for row in range(0,9):
         for col in range(0,9):
@@ -117,30 +160,18 @@ def _Solution_With_Backtracking(sudoku):
     return("No se pudo encontrar una solucion")
 
 
-def _Backtracking_1(sudoku,locations,r,c):
-    if _is_It_Solved(sudoku) is False:
-        
-        if _valid(sudoku) is False:
-        #_valid(sudoku) is False:
-            r = locations[-1] 
-            c = locations[-1]
-            for n in range(1,10):#(num,10):
-                sudoku[r][c] = n
-                if not _valid(sudoku):
-                    sudoku[r][c] = 0
-                    continue
-                if _Backtracking_1(sudoku,locations,r,c):
-                    return True
-                #Si num hace que _valid(sudoku) sea falso, que pase al siguiente num
-            
-            #Si num hace que _valid(sudoku) sea verdadero, que se mantenga ese num
-    
-            locations.pop()#Si ninguna solucion es verdadera, se corrige la anterior
-            return _Backtracking_1(sudoku,locations,r,c)    
-        return True
-    return True
 
 def _Backtracking(sudoku,locations,r=0,c=0):
+    """
+    A backtracking that uses a FILO pruning, every block where the zero was located is a branch, if a brach
+    is invalid then is cut, else that option is explore deeper until it leads to the answer
+    
+    Args:
+        sudoku (array): a array filed with zeros mostly and integers between 1 to 9.
+    
+    Returns:
+        Boolean: True or False.
+    """
     if _is_It_Solved(sudoku):
         return True
     
@@ -149,26 +180,27 @@ def _Backtracking(sudoku,locations,r=0,c=0):
     
     r = locations[-1][0]
     c = locations[-1][1]
-    for n in range(1,10):#(num,10):
+    for n in range(1,10):
         sudoku[r][c] = n
         if _valid(sudoku):
-            #sudoku[r][c] = 0
-            #continue
             next_position = locations[:-1]
             if _Backtracking(sudoku,next_position):
                 return True
         sudoku[r][c] = 0
-
-            #Si num hace que _valid(sudoku) sea falso, que pase al siguiente num
-            
-            #Si num hace que _valid(sudoku) sea verdadero, que se mantenga ese num
-    
-    #locations.pop()#Si ninguna solucion es verdadera, se corrige la anterior
-    #return _Backtracking(sudoku,locations,r,c)    
+  
     return False
 
 
 def _is_It_Solved(sudoku):
+    """
+    Counts the number of zeros in the sudoku, if theres not any zeros left that means is solved, return True, else return False
+    
+    Args:
+        sudoku (array): a array filed with zeros mostly and integers between 1 to 9 or only integers between 1 to 9.
+    
+    Returns:
+        Boolean: True or False
+    """
     count = 0
     for row in sudoku:
         for col in row:
@@ -180,10 +212,11 @@ def _is_It_Solved(sudoku):
     
     return False           
 
+
 while True:
     The_sudoku = _Asudoku()
     if _valid(The_sudoku):
-        break  # sale del ciclo si es válido
+        break
 
 
 print("Sudoku válido generado:\n")
@@ -191,42 +224,14 @@ for row in The_sudoku:
     print(row)
 
 
-print("\nLa solución es:")
+print("\nLa solución es:\n")
 solution = _Solution_With_Backtracking(The_sudoku)
 for r in solution:
     print(r)
-#for row in solution:
-#    print(row)
 
 
 
-"""       
-The_sudoku = _Asudoku()
-Asudoku = _valid(The_sudoku)
-print(Asudoku, "\n")
-for row in range(0,9):
-    print(The_sudoku[row])
 
-print("La solucion es:")
-print(_Solution_With_Backtracking(The_sudoku))
-
-
-
-while True:
-    The_sudoku = _Asudoku()
-    Asudoku = _valid(The_sudoku)
-    print(f"Resultado de _valid: {Asudoku}") 
-    if Asudoku is True:#_valid(The_sudoku):
-        print("Sudoku valido: \n")
-        for row in range(0,9):
-            print(The_sudoku[row])
-        break
-    
-    else:
-        
-        print("Sudoku Invalido, generando uno nuevo...\n")
-         
-""" 
 
 
        
