@@ -1,7 +1,5 @@
 import random
-base = ['cuadricula','cuadricula','cuadricula',
-          'cuadricula','cuadricula','cuadricula',
-          'cuadricula','cuadricula','cuadricula']
+
 
 sudoku = [[0,0,0,0,0,0,0,0,0],
           [0,0,0,0,0,0,0,0,0],
@@ -12,13 +10,6 @@ sudoku = [[0,0,0,0,0,0,0,0,0],
           [0,0,0,0,0,0,0,0,0],
           [0,0,0,0,0,0,0,0,0],
           [0,0,0,0,0,0,0,0,0]]
-
-
-def _len(_list):
-    num = 0
-    for e in _list:
-        num += 1
-    return num
 
 
 
